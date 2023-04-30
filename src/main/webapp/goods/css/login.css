@@ -1,0 +1,170 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+html {
+    height: 100%;
+}
+body {
+    /*background-image: linear-gradient(to bottom right, rgb(114, 135, 254), rgb(130, 88, 186));*/
+    background: url("../img/login.jpg") center no-repeat;
+    background-size:cover;  /* 让背景图基于容器大小伸缩 */
+    background-attachment:fixed;        /* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */    //此条属性必须设置否则可能无效/
+    background-color:#CCCCCC;;
+}
+.login-container {
+    width: 600px;
+    height: 315px;
+    margin: 0 auto;
+    margin-top: 10%;
+    border-radius: 15px;
+    box-shadow: 0 10px 50px 0px rbg(59, 45, 159);
+    /*background-color: rgb(95, 76, 194);*/
+    background: #00000080;
+}
+.left-container {
+    display: inline-block;
+    width: 330px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    padding: 60px;
+    /*background-image: linear-gradient(to bottom right, rgb(118, 76, 163), rgb(92, 103, 211));*/
+}
+.title {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 200;
+}
+.title span {
+    border-bottom: 3px solid rgb(237, 221, 22);
+}
+.input-container {
+    padding: 20px 0;
+}
+input {
+    border: 0;
+    background: none;
+    outline: none;
+    color: #fff;
+    margin: 20px 0;
+    display: block;
+    width: 100%;
+    padding: 5px 0;
+    transition: .2s;
+    border-bottom: 1px solid rgb(199, 191, 219);
+}
+input:hover {
+    border-bottom-color: #fff;
+}
+::-webkit-input-placeholder {
+    color: rgb(199, 191, 219);
+}
+.message-container {
+    font-size: 14px;
+    transition: .2s;
+    color: rgb(199, 191, 219);
+    cursor: pointer;
+}
+.message-container:hover {
+    color: #fff;
+}
+.right-container {
+    width: 145px;
+    display: inline-block;
+    height: calc(100% - 120px);
+    vertical-align: top;
+    padding: 60px 0;
+    background-image: url("../img/regist.jpg");
+    background-size: 200px;
+}
+.regist-container {
+    text-align: center;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 200;
+}
+.regist-container span {
+    border-bottom: 3px solid rgb(237, 221, 22);
+    font-size: 18px;
+}
+
+.regist-container p {
+    font-size: 15px;
+}
+
+.action-container {
+    font-size: 10px;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    top: 130px;
+}
+.action-container span {
+    border: 1px solid rgb(237, 221, 22);
+    padding: 10px;
+    display: inline;
+    line-height: 20px;
+    border-radius: 20px;
+    position: absolute;
+    bottom: 10px;
+    left: calc(72px - 20px);
+    transition: .2s;
+    cursor: pointer;
+}
+.action-container span:hover {
+    background-color: rgb(237, 221, 22);
+    color: rgb(95, 76, 194);
+    font-size: 18px;
+}
+
+.regist-button {
+    display: inline-block;
+    width: 100px;
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid #03045e;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s ease-in;
+    z-index: 1;
+    text-align: center;
+}
+
+.regist-button::before,
+.regist-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 100%;
+    transform: skew(15deg);
+    transition: all 0.5s;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.regist-button::before {
+    left: -10px;
+    background: #240046;
+}
+
+.regist-button::after {
+    right: -10px;
+    background: #5a189a;
+}
+
+.regist-button:hover::before,
+.regist-button:hover::after {
+    width: 58%;
+}
+
+.regist-button:hover span {
+    color: #e0aaff;
+    transition: 0.3s;
+}
+
+.regist-button span {
+    color: #fff9ec;
+    font-size: 18px;
+    transition: all 0.3s ease-in;
+}

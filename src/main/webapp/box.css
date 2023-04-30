@@ -1,0 +1,22 @@
+.bigBox {
+    display: flex;
+    position: absolute;
+    width: 85%;
+    height: auto;
+    top: 58%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),0 17px 50px 0 #4E655D;
+    flex-wrap: wrap;
+}
+
+.littleBox {
+    display: inline-block;
+    width: 150px;
+    height: 180px;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 2%;
+    box-shadow: 5px 5px 5px grey;
+}
+

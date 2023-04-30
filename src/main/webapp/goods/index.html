@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>goods</title>
+    <link rel="stylesheet" href="../box.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <script src="../layui/layui.js"></script>
+</head>
+<body>
+<div>
+    <ul class="layui-nav" style="padding-left: 10%">
+        <li class="layui-nav-item">
+            <a href="">
+                <i class="layui-icon layui-icon-home"style="font-size: 18px"> 首页</i>
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="">
+                <i class="layui-icon layui-icon-cart"style="font-size: 18px"> 购物车</i>
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="">
+                <i class="layui-icon layui-icon-chart-screen"style="font-size: 18px"> 可视化</i>
+            </a>
+        </li>
+        <span style="padding-left: 60%">
+            <li class="layui-nav-item" >
+                <a href=""><img src="//t.cn/RCzsdCq" class="layui-nav-img">我</a>
+                <dl class="layui-nav-child" >
+                    <dd><a href="javascript:;" >查看订单</a></dd>
+                    <dd><a href="javascript:;">修改信息</a></dd>
+                    <dd><a href="javascript:;">退出登录</a></dd>
+                </dl>
+            </li>
+        </span>
+    </ul>
+</div>
+
+<div class="bigBox" style="margin-top: 32%;">
+
+    <div class="layui-carousel" id="test1" style="margin-top: 40px;margin-left: 22%;" >
+        <div carousel-item>
+            <div><img src="https://img.58cdn.com.cn/chuangxin/ershou/sale/dalei/slide1.png"></div>
+            <div><img src="https://bucket-daigoujp.oss-ap-northeast-1.aliyuncs.com/permanentTempImg/upload_a94894bb_fe90_4acd_97b4_2160c7f122ab_00000078.tmp?x-oss-process=image/resize,p_100"></div>
+        </div>
+    </div>
+
+    <div style="margin:auto;padding-top: 20px;" >
+        <button class="layui-btn" id="select" >
+            选择分类
+            <i class="layui-icon layui-icon-down layui-font-12"></i>
+        </button>
+        <input type="text" name="title" placeholder="请输入搜素内容" class="layui-input" style="display:inline;">
+        <button class="layui-btn layui-btn-primary" style="position: absolute;">搜索</button>
+    </div>
+
+    <div style="padding: 5%;padding-left: 12%;">
+        #for(x:list)
+        <li class="littleBox" id="#(x.id)" >
+            <img src="#(x.img)" width="150px" height="140px">
+            <span style="text-align: center;">#(x.name): #(x.price)</span>
+        </li>
+        #end
+    </div>
+</div>
+
+<script>
+    layui.use('layer', function(){
+        var lis = document.getElementsByClassName('littleBox')
+        for(var i = 0;i < lis.length; i++){
+            // console.log(lis[i].id)
+            var id = lis[i].value
+            lis[i].onclick = function (data) {
+                console.log(id)
+                layer.open({
+                    title: '商品详情',
+                    content:'<h3>商品名称：#(list[0].name)</h3>'+
+                        '<h3>商品价格：#(list[0].price)</h3>' +
+                        '<h3>商品所属人：#(list[0].owner)</h3>' +
+                        '<h3>商品描述：#(list[0].show)</h3>',
+                    btn:['购买','确认'],btn1:function (index,layeo){
+                        console.log('#(list[0].id)')
+                    },
+
+                });
+            }
+        }
+    });
+    layui.use('carousel', function(){
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#test1'
+            ,width: '60%' //设置容器宽度
+            ,arrow: 'always' //始终显示箭头
+            //,anim: 'updown' //切换动画方式
+        });
+    });
+    layui.use('dropdown', function(){
+        var dropdown = layui.dropdown
+        dropdown.render({
+            elem: '#select' //可绑定在任意元素中，此处以上述按钮为例
+            ,data: [{
+                title: '食品类'
+                ,id: 1
+            },{
+                title: '文具类'
+                ,id: 2
+            },{
+                title: '书籍类'
+                ,id: 3
+            },{
+                title: '服装服饰'
+                ,id: 4
+            },{
+                title: '日常用品'
+                ,id: 5
+            },{
+                title: '电子产品'
+                ,id: 6
+            }]
+            ,type:'group'
+            ,id: 'select'
+            //菜单被点击的事件
+            ,click: function(obj){
+                var d = document.getElementById('select')
+                d.textContent = obj.title
+                console.log(d)
+                console.log(obj);
+            }
+        });
+    });
+
+
+</script>
+
+</body>
+</html>

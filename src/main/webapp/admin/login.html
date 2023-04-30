@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>管理员登录</title>
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+<body>
+    <div id="login-box">
+        <h1>店铺登录</h1>
+        <div class="form">
+            <div class="item">
+                <input type="text" placeholder="username" name="username" id="username">
+            </div>
+            <div class="item">
+                <input type="password" placeholder="password" name="password" id="password">
+            </div>
+        </div>
+        <button type="submit" name="login" id="login">Login</button>
+    </div>
+<script>
+    document.getElementById('login').addEventListener('click',function() {
+        var username = document.getElementById('username');
+        var password = document.getElementById('password');
+        if (username.value == "") {
+            alert("请输入用户名");
+        } else if (password.value  =="") {
+            alert("请输入密码");
+        } else if(username.value == "admin" && password.value == "123456"){
+            window.location.href='https://www.baidu.com/';
+        } else {
+            alert("请输入正确的用户名和密码！")
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.lhc</groupId>
+  <artifactId>project-jfinal</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  
+  
+  <dependencies>
+      <!-- jfinal -->
+      <dependency>
+          <groupId>com.jfinal</groupId>
+          <artifactId>jfinal</artifactId>
+          <version>5.0.0</version>
+      </dependency>
+
+      <!-- jfinal-undertow 开发、部署一体化 web 服务器 -->
+      <dependency>
+          <groupId>com.jfinal</groupId>
+          <artifactId>jfinal-undertow</artifactId>
+          <version>3.0</version>
+      </dependency>
+
+      <!-- cos 文件上传 -->
+      <dependency>
+          <groupId>com.jfinal</groupId>
+          <artifactId>cos</artifactId>
+          <version>2022.2</version>
+      </dependency>
+
+      <!-- 二维码生成 -->
+      <dependency>
+          <groupId>com.google.zxing</groupId>
+          <artifactId>javase</artifactId>
+          <version>3.2.1</version>
+      </dependency>
+
+      <!-- junit单元测试 -->
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.11</version>
+        <scope>test</scope>
+    </dependency>
+
+      <!-- mysql 驱动 -->
+      <dependency>
+          <groupId>mysql</groupId>
+          <artifactId>mysql-connector-java</artifactId>
+          <version>5.1.49</version>
+      </dependency>
+
+      <!-- druid 数据源连接池 -->
+      <dependency>
+          <groupId>com.alibaba</groupId>
+          <artifactId>druid</artifactId>
+          <version>1.0.29</version>
+      </dependency>
+
+      <!-- ehcache缓存 -->
+      <dependency>
+          <groupId>net.sf.ehcache</groupId>
+          <artifactId>ehcache-core</artifactId>
+          <version>2.6.10</version>
+      </dependency>
+
+</dependencies>
+
+
+</project>
