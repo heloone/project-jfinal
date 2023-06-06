@@ -1,6 +1,8 @@
 package com.lhc.goods.service;
 
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.lhc.common.model.Cart;
 
 import java.util.List;
@@ -12,15 +14,16 @@ import java.util.List;
  **/
 public class CartService {
     private final Cart cartDao = new Cart().dao();
+    private final Cart cart = new Cart();
 
     /**
      * @Description: 通过查询cart表获取goodID，从而得到在购物车中的物品信息
      * @param userId
      * @return cartList
      */
-    public List<Cart> cartList(int userId) {
-        String sql = cartDao.getSql("goodIdByCart");
-        List<Cart> cartsList = cartDao.find("select * from goods where id = ?",cartDao.find(sql,userId));
+    public List<Record> cartList(int userId) {
+        String sql = Db.getSql("goodIdByCart");
+        List<Record> cartsList = Db.find(sql,userId);
         return cartsList;
     }
 
@@ -29,10 +32,16 @@ public class CartService {
      * @param goodId，商品id
      * @param userId，购买者id
      */
-    public void addCart(int goodId,int userId) {
-        cartDao.set("goodId",goodId);
-        cartDao.set("userId",userId);
-        cartDao.save();
+    public String addCart(int goodId,int userId) {
+        List<Cart> carts = cartDao.find("select * from cart where goodId=? and userId=?",goodId,userId);
+        if(carts.size() > 0){
+            return "购物车中已存在，请勿重复添加";
+        }else{
+            cart.set("goodId",goodId);
+            cart.set("userId",userId);
+            cart.save();
+            return "添加成功";
+        }
     }
 
     /**

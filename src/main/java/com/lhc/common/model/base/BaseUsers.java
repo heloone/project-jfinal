@@ -49,5 +49,13 @@ public abstract class BaseUsers<M extends BaseUsers<M>> extends Model<M> impleme
 		return getStr("address");
 	}
 	
+	public void setPhone(java.lang.String phone) {
+		set("phone", phone);
+	}
+	
+	public java.lang.String getPhone() {
+		return getStr("phone");
+	}
+	
 }
 

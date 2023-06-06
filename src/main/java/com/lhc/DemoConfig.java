@@ -1,15 +1,20 @@
 package com.lhc;
 
 import com.jfinal.config.*;
+import com.jfinal.json.FastJsonFactory;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.server.undertow.UndertowServer;
 import com.jfinal.template.Engine;
 import com.jfinal.template.ext.directive.NowDirective;
+import com.lhc.common.headler.GlobalHandler;
+import com.lhc.common.interceptor.CorsInterceptor;
+import com.lhc.common.interceptor.ExceptionInterceptor;
 import com.lhc.common.model._MappingKit;
 import com.lhc.common.route.AdminRoutes;
 import com.lhc.common.route.UserRoutes;
+import com.lhc.common.validator.AdminLoginValidator;
 
 
 /**
@@ -39,9 +44,9 @@ public class DemoConfig extends JFinalConfig {
 		// 配置对超类中的属性进行注入
 		me.setDevMode(true);
 		//配置下载路径
-		me.setBaseDownloadPath("demo/Download");
-		//配置上传路径
-		me.setBaseUploadPath("demo/Upload");
+		me.setJsonFactory(new FastJsonFactory());
+		me.setError404View("/common/404.html");
+		me.setError500View("/common/500.html");
 	}
 	
 	/**
@@ -56,8 +61,8 @@ public class DemoConfig extends JFinalConfig {
 	
 	public void configEngine(Engine me) {
 //		me.addSharedFunction("/common/_layout.html");
-//		me.addSharedFunction("/common/_paginate.html");
 		me.addDirective("now", NowDirective.class);
+		me.addSharedFunction("/common/info.html");
 	}
 	
 	/**
@@ -69,6 +74,7 @@ public class DemoConfig extends JFinalConfig {
 		me.add(dp);
 		// 配置ActiveRecord插件
 		ActiveRecordPlugin arp = new ActiveRecordPlugin(dp);
+		arp.setShowSql(true);
 		_MappingKit.mapping(arp);
 		me.add(arp);
 		//配置缓存机制
@@ -82,15 +88,17 @@ public class DemoConfig extends JFinalConfig {
 	 * 配置全局拦截器
 	 */
 	public void configInterceptor(Interceptors me) {
-//		me.add(new DemoInterceptor());
+//		me.add(new CorsInterceptor());
+		me.add(new ExceptionInterceptor());
 //		me.add(new LoginValidator());
+//		me.add(new AdminLoginValidator());
 	}
 	
 	/**
 	 * 配置处理器
 	 */
 	public void configHandler(Handlers me) {
-		
+		me.add(new GlobalHandler());
 	}
 
 }

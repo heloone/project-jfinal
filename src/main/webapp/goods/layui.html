@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>淘淘乐</title>
+    <link rel="stylesheet" type="text/css" href="../layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../box.css">
+    <script src="../layui/layui.js"></script>
+    <script src="../echarts.min.js"></script>
+    <script src="../jquery-3.6.4.min.js"></script>
+
+    <style type="text/css">
+        .layui-table-cell{
+            height: auto!important;
+            white-space: normal;
+        }
+        .box{
+            width: 700px;
+            height: 500px;
+            background-color: rgb(188, 227, 236);
+        }
+    </style>
+</head>
+<body>
+    <div class="layui-fluid">
+        <!-- 导航栏 -->
+        <div class="layui-row layui-col-space32">
+            <ul class="layui-nav" style="padding-left: 10%">
+                <li class="layui-nav-item">
+                    <a href="">
+                        <i class="layui-icon layui-icon-home"style="font-size: 18px"> 首页</i>
+                    </a>
+                </li>
+                <li class="layui-nav-item">
+                    <a>
+                        <i class="layui-icon layui-icon-cart"style="font-size: 18px" onclick="cart()"> 购物车<span class="layui-badge" name="msgs">0</span></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item">
+                    <a>
+                        <i class="layui-icon layui-icon-chart-screen"style="font-size: 18px" onclick="show_echarts()"> 可视化</i>
+                    </a>
+                </li>
+                <span style="padding-left: 60%">
+            <li class="layui-nav-item" >
+                <a id="myName"><img src="//t.cn/RCzsdCq" class="layui-nav-img">我</a>
+                <dl class="layui-nav-child" >
+                    <dd><a href="javascript:;" onclick="shopping()">查看订单</a></dd>
+                    <dd><a href="javascript:;" onclick="editInfo()">修改信息</a></dd>
+                    <dd><a href="javascript:;" onclick="sign_out()">退出登录</a></dd>
+                </dl>
+            </li>
+        </span>
+            </ul>
+        </div>
+        <div class="layui-row" style="margin-top: 25px"></div>
+
+        <!-- 首页 -->
+        <div class="layui-box" id="indexs">
+            <!-- 下拉跟随 -->
+            <div style="position: fixed;
+            top: -100px;  /*-80px默认情况为隐藏头图，下滑到一定距离再显示*/
+            left: 0;
+            background-color:#ffffff;
+            width: 100%;
+            height: 80px;
+            text-align: center;
+            color: #fff;
+            line-height: 80px;
+            transition: all .3s;" id="search">
+                <img src="./img/tubiao.png" height="80px" width="90px">
+                <button class="layui-btn" id="select1" >
+                    选择分类
+                    <i class="layui-icon layui-icon-down layui-font-12"></i>
+                </button>
+                <input type="text" name="title1" placeholder="请输入搜索内容" class="layui-input" style="display:inline;width: 40%;">
+                <button class="layui-btn layui-btn-primary" onclick="sear_goods(1)" >搜索</button>
+            </div>
+
+            <!-- 搜索栏 -->
+            <div class="layui-row" >
+                <div class="layui-col-md-offset3">
+                    <img src="./img/tubiao.png" height="80px" width="90px">
+                    <button class="layui-btn" id="select2" >
+                        选择分类
+                        <i class="layui-icon layui-icon-down layui-font-12"></i>
+                    </button>
+                    <input type="text" name="title2" placeholder="请输入搜索内容" class="layui-input" style="display:inline;width: 40%;">
+                    <button class="layui-btn layui-btn-primary" onclick="sear_goods(2)" >搜索</button>
+                </div>
+            </div>
+            <div class="layui-row" style="margin-top: 25px"></div>
+
+            <!-- 物品方格 -->
+            <div class="layui-row layui-col-md-offset1" id="goods" >
+                <div style="
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),0 17px 50px 0 #4E655D;margin-right: 80px" id="good">
+                    #for(x:list)
+                    <li class="littleBox" onclick="openInfo(#(x.id))" id="good1">
+                        <img src="#(x.img)" width="150px" height="140px">
+                        <span style="text-align: center;display: block">#(x.name)：#(x.price) </span>
+                        <span style="text-align: center;display: block">类型：#(x.type) </span>
+                    </li>
+                    #end
+                </div>
+                <!-- 分页 -->
+                <div class="layui-col-md-offset1" id="test1" style="display: inline;"></div>
+            </div>
+        </div>
+
+        <!-- 购物车 -->
+        <div id="show_good">
+<!--            <script type="text/html" id="toolbarShopping">-->
+<!--                <div class="layui-btn-container">-->
+<!--                    <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>-->
+<!--                    <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>-->
+<!--                    <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>-->
+<!--                </div>-->
+<!--            </script>-->
+            <script type="text/html" id="barDemo">
+                <input type="text" name="orders" placeholder="请输入搜索内容" class="layui-input" style="display:inline-flex;width: 25%;margin-top: 17px;">
+                <button class="layui-btn layui-btn-primary" onclick="shopping()" >搜索</button>
+            </script>
+            <table class="layui-hide" id="cart" lay-filter="ed">
+            </table>
+
+            <script type="text/html" id="tool">
+                <a class="layui-btn layui-btn-xs" lay-event="buy">购买</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+            </script>
+
+            <script type="text/html" id="img">
+                <div><img src="{{d.img}}" width="80" height="80" alt="no"></div>
+            </script>
+        </div>
+
+        <!-- 可视化 -->
+
+    </div>
+    <div>
+        <iframe id="iframe" src="" frameborder="0" height="540" width="1250" ></iframe>
+    </div>
+
+<script>
+    var page_url = "http://localhost/goods/sear_goods"
+    var findName = null
+    var findType = null
+    var msgs = 0
+
+    $("#iframe").attr('style','display:none')
+    layui.use('carousel', function(){
+        var carousel = layui.carousel;
+        //建造实例
+        carousel.render({
+            elem: '#test1'
+            ,width: '70%' //设置容器宽度
+            ,arrow: 'always' //始终显示箭头
+            //,anim: 'updown' //切换动画方式
+        });
+    });
+    //两个下拉框可以使用enjoy模板定义
+    layui.use('dropdown', function(){
+        var dropdown = layui.dropdown
+        dropdown.render({
+            elem: '#select1' //可绑定在任意元素中，此处以上述按钮为例
+            ,data: [{
+                title: '食品类'
+                ,id: 1
+            },{
+                title: '文具类'
+                ,id: 2
+            },{
+                title: '书籍类'
+                ,id: 3
+            },{
+                title: '服装服饰'
+                ,id: 4
+            },{
+                title: '日常用品'
+                ,id: 5
+            },{
+                title: '电子产品'
+                ,id: 6
+            }]
+            ,type:'group'
+            ,id: 'select1'
+            //菜单被点击的事件
+            ,click: function(obj){
+                var d = document.getElementById('select1')
+                d.textContent = obj.title
+                findType = d.textContent
+                console.log(d)
+                console.log(obj);
+            }
+        });
+    });
+    layui.use('dropdown', function(){
+        var dropdown = layui.dropdown
+        dropdown.render({
+            elem: '#select2' //可绑定在任意元素中，此处以上述按钮为例
+            ,data: [{
+                title: '食品类'
+                ,id: 1
+            },{
+                title: '文具类'
+                ,id: 2
+            },{
+                title: '书籍类'
+                ,id: 3
+            },{
+                title: '服装服饰'
+                ,id: 4
+            },{
+                title: '日常用品'
+                ,id: 5
+            },{
+                title: '电子产品'
+                ,id: 6
+            }]
+            ,type:'group'
+            ,id: 'select2'
+            //菜单被点击的事件
+            ,click: function(obj){
+                var d = document.getElementById('select2')
+                d.textContent = obj.title
+                findType = d.textContent
+                console.log(d)
+                console.log(obj);
+            }
+        });
+    });
+
+    //网页下滑时显示固定头部导航栏
+    let sk = document.querySelector('#goods')
+    let header = document.querySelector('#search')
+    window.addEventListener('scroll',function(){
+        if(document.documentElement.scrollTop >= sk.offsetTop){ //（滚动距离）大于（秒杀模块到顶部的距离）时
+            header.style.top = '0'  //scrollTop返回数据不带单位，所以不加px
+        }else{
+            header.style.top = '-100px' //往回滑动时再隐藏; 修改的是css需加单位
+        }
+
+    })
+
+    //分页
+    layui.use('laypage', function(){
+        $("#iframe").attr('style','display:none')
+        // page_url = "http://localhost/goods/sear_goods"
+        //执行一个laypage实例
+        layPage()
+    });
+    function layPage(){
+        layui.laypage.render({
+            elem: 'test1'
+            ,count: 14
+            ,limit: 10
+            ,limits: [5,10, 15, 20]
+            ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+            ,jump: function(obj){
+                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                console.log(obj.limit); //得到每页显示的条数
+                $.get(page_url,{
+                    'page':obj.curr,
+                    'limit':obj.limit,
+                    'name':findName,
+                    'type':findType
+                },function (data){
+                    console.log(data)
+                    let list = data.goodsPage.list
+                    obj.count = data.goodsPage.totalRow
+                    console.log(obj)
+                    var htmlStr = ""
+                    for(let i=0;i<data.list.length;i++) {
+                        htmlStr += '<li class="littleBox" onClick="openInfo('+ list[i].id +')" id=box"'+list[i].id+'>'
+                        htmlStr += '<img src="'+ list[i].img +'" width="150px" height="140px">'
+                        htmlStr += '<span style="text-align: center;display: block">'+list[i].name+"："+list[i].price+'</span>'
+                        htmlStr += '<span style="text-align: center;display: block">类型：'+list[i].type+'</span>'
+                        htmlStr += '</li>'
+                    }
+                    // console.log(htmlStr);
+                    $('#good').html(htmlStr)//更新表格数据
+
+                    // $.parser.parse('#good')
+                })
+
+            }
+        });
+    }
+
+    //详情页
+    function openInfo(id){
+        console.log(id)
+        layui.use('layer', function(){
+            var layer = layui.layer;
+
+            layer.open({
+                type:2,
+                title:"商品详细",
+                area:['450px','600px'],
+                //content 使用enjoy模板，传递参数 obj.data
+                content:['http://localhost/goods/getInfo?id='+id,'no'],
+                btn:["添加购物车","取消"],
+                yes:function (){
+                    $.get("http://localhost/goods/addCart",{
+                        'id':layer.getChildFrame('body').find("[name='id']").val(),
+                    },function (data){
+                        console.log(data)
+                        alert(data.msg)
+                        if(data.msg === '添加成功')
+                        msgs = msgs + 1
+                        console.log($("[name='msgs']").text())
+                        $("[name='msgs']").text(msgs)
+                    })
+                    layer.close(layer.index)
+                }
+            })
+        });
+    }
+
+    //搜索
+    function sear_goods(data) {
+        // console.log(data) 改page_url
+        if(data === 1){
+            findName = $("[name='title1']").val()
+            console.log(findName)
+            console.log(findType)
+        }else{
+            findName = $("[name='title2']").val()
+            console.log(findName)
+            console.log(findType)
+        }
+        console.log(findType)
+        layPage()
+    }
+
+    //购物车
+    function cart(){
+        $("#indexs").attr('style','display:none')
+        $("#iframe").attr('style','display:none')
+        $("#show_good").attr('style','display:block')
+        msgs = 0
+        $("[name='msgs']").text(msgs)
+        layui.use('table', function(){
+            var table = layui.table;
+            //渲染表格
+            table.render({
+                elem: '#cart'
+                ,url: 'http://localhost/goods/searCart' //数据接口
+                ,parseData: function(res){ //res 即为原始返回的数据
+                    return {
+                        "code": res.code,//解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "count": res.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                }
+                ,totalRow: true
+                ,cols: [[ //表头
+                    {field:'id', title:'ID', width:80, sort: true, totalRowText: '合计'}
+                    ,{field: 'name', title: '商品名', align: 'center', width:100}
+                    ,{field: 'img', title: '商品图片', align: 'center', width:160, templet : '#img'}
+                    ,{field: 'type', title: '商品类别', align: 'center', width:160}
+                    ,{field: 'info', title: '商品信息', align: 'center', width:160}
+                    ,{field: 'price', title: '商品价格', align: 'center', width:160,sort: true, totalRow: true}
+                    // ,{field: 'owner'}
+                    ,{fixed: 'right', title: '操作', toolbar: '#tool', minWidth:160}
+                ]]
+                ,skin: 'row' //表格风格
+                ,even: true
+                ,page: true //开启分页
+                ,limit: 4 //每页默认显示的数量
+                ,limits:[4,8,16]
+
+            });
+
+            table.on('tool(ed)', function(obj){
+                var data = obj.data;
+                console.log(obj)
+                if(obj.event === 'del'){
+                    layer.open({
+                        title:"提示框",
+                        content:"是否删除该行",
+                        btn:["删除","取消"],
+                        yes:function(layero, index){
+                            console.log(obj.data.id)
+                            $.get("http://localhost/goods/delCart",{
+                                'goodId':obj.data.id,
+                            },function (res) {
+                                console.log(res)
+                                alert(res.msg)
+                            })
+                            obj.del();
+                            layer.close(layer.index)
+                            layui.table.reload("cart",{
+                                url:'http://localhost/goods/searCart'
+                            })
+                        }
+                    });
+
+                } else if(obj.event === 'buy'){
+                    $.get("http://localhost/goods/addShopping",{
+                        'goodId':obj.data.id,
+                        'userId':1
+                    },function (res) {
+                        console.log(res)
+                        alert(res.msg)
+                    })
+                    layui.table.reload("cart",{
+                        url:'http://localhost/goods/searCart'
+                    })
+                }
+            });
+        });
+    }
+
+    //订单
+    function shopping(){
+        $("#indexs").attr('style','display:none')
+        $("#iframe").attr('style','display:none')
+        $("#show_good").attr('style','display:block')
+        let orders = $("[name='orders']").val()
+        layui.table.render({
+            elem: '#cart'
+            ,url: 'http://localhost/goods/getShopping?name='+orders //数据接口
+            ,parseData: function(res){ //res 即为原始返回的数据
+                return {
+                    "code": res.code,//解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": res.data //解析数据列表
+                };
+            }
+            ,cols: [[ //表头
+                ,{field: 'adminName', title: '店家账号', align: 'center', width: 110}
+                , {field: 'user', title: '店家名称', align: 'center', width: 100}
+                , {field: 'name', title: '商品名称', align: 'center', width: 100}
+                , {field: 'img', title: '商品图片', align: 'center', width: 160, templet: '#img'}
+                , {field: 'type', title: '商品类别', align: 'center', width: 100}
+                , {field: 'info', title: '商品信息', align: 'center', width: 100}
+                , {field: 'price', title: '商品价格', align: 'center', width: 160, sort: true}
+                , {field: 'time', title: '交易时间', align: 'center', width: 160, sort: true}
+            ]]
+            ,skin: 'row' //表格风格
+            ,even: true
+            ,page: true //开启分页
+            ,limit: 4 //每页默认显示的数量
+            ,limits:[4,8,16]
+            ,toolbar: '#toolbarShopping'
+        });
+    }
+
+    //修改个人信息
+    function editInfo(){
+        layer.open({
+            type:2,
+            title:"修改个人信息",
+            area:['450px','500px'],
+            //content 使用enjoy模板，传递参数 obj.data
+            content:['http://localhost/goods/getUser','no'],
+        })
+    }
+
+    //可视化
+    function  show_echarts(){
+        $("#indexs").attr('style','display:none')
+        $("#show_good").attr('style','display:none')
+        $("#iframe").attr('style','display:block')
+        iframe.setAttribute("src",'http://localhost/goods/show_goods')
+    }
+
+    //退出登录，删除token
+    function sign_out(){
+        localStorage.removeItem("userToken")
+        window.location.href="login.html"
+    }
+
+    //获取name
+    $.get("http://localhost/goods/getName",{},function (res){
+        console.log(res)
+        $('#myName').text(res.user)
+    })
+
+
+</script>
+</body>
+</html>

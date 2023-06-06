@@ -49,12 +49,12 @@ public abstract class BaseGoods<M extends BaseGoods<M>> extends Model<M> impleme
 		return getStr("type");
 	}
 	
-	public void setPrice(java.math.BigDecimal price) {
+	public void setPrice(java.lang.String price) {
 		set("price", price);
 	}
 	
-	public java.math.BigDecimal getPrice() {
-		return get("price");
+	public java.lang.String getPrice() {
+		return getStr("price");
 	}
 	
 	public void setOwnerId(java.lang.Integer ownerId) {

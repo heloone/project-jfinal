@@ -17,6 +17,14 @@ public abstract class BaseAdmins<M extends BaseAdmins<M>> extends Model<M> imple
 		return getInt("id");
 	}
 	
+	public void setName(java.lang.String name) {
+		set("name", name);
+	}
+	
+	public java.lang.String getName() {
+		return getStr("name");
+	}
+	
 	public void setUser(java.lang.String user) {
 		set("user", user);
 	}
@@ -31,6 +39,22 @@ public abstract class BaseAdmins<M extends BaseAdmins<M>> extends Model<M> imple
 	
 	public java.lang.String getPassword() {
 		return getStr("password");
+	}
+	
+	public void setAddress(java.lang.String address) {
+		set("address", address);
+	}
+	
+	public java.lang.String getAddress() {
+		return getStr("address");
+	}
+	
+	public void setPhone(java.lang.String phone) {
+		set("phone", phone);
+	}
+	
+	public java.lang.String getPhone() {
+		return getStr("phone");
 	}
 	
 }

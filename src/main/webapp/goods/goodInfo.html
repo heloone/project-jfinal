@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品详情</title>
+    <link rel="stylesheet" type="text/css" href="../layui/css/layui.css">
+</head>
+<body>
+<div style="margin-top: 15px">
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品名称</label>
+        <div class="layui-input-block">
+            <input type="text" disabled
+                   autocomplete="off" class="layui-input" style="width:200px" value="#(good.name)">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品类型</label>
+        <div class="layui-input-block">
+            <input type="text" disabled
+                   autocomplete="off" class="layui-input" style="width:200px" value="#(good.type)">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品图片</label>
+        <div class="layui-input-block">
+            <img src="#(good.img)" width="160px" height="140px">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品信息</label>
+        <div class="layui-input-block">
+            <input type="text" disabled
+                   autocomplete="off" class="layui-textarea"  style="width:200px;" value="#(good.info)">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品价格</label>
+        <div class="layui-input-block">
+            <input type="text" disabled
+                   autocomplete="off" class="layui-input" style="width:200px" value="#(good.price)">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">商品所有人</label>
+        <div class="layui-input-block">
+            <input type="text" disabled value="#(good.user)"
+                   autocomplete="off" class="layui-input" style="width:200px">
+        </div>
+    </div>
+
+    <div class="layui-form-item" style="display: none">
+        <label class="layui-form-label">商品id</label>
+        <div class="layui-input-block">
+            <input type="text" disabled value="#(good.id)" name="id"
+                   autocomplete="off" class="layui-input" style="width:200px">
+        </div>
+    </div>
+</div>
+</body>
+</html>

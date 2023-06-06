@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <script src="../jquery-3.6.4.min.js"></script>
+</head>
+<body >
+12323232132
+<div id="body"></div>
+<script>
+    $.ajax({
+        url:"http://localhost/admin/index.html",
+        dataType:"html",
+        crossDomain:true,
+        headers: {
+            "authorization":localStorage.getItem("adminToken")
+        },
+        successs: function (res){
+            console.log(res)
+            $('body').html(res)
+        }
+     })
+</script>
+
+</body>
+</html>

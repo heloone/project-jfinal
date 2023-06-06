@@ -208,5 +208,8 @@ public class MD5 {
 //        public static void main(String[] args) {
 //            String str = getInstance().getMD5("123456");
 //            System.out.println("e10adc3949ba59abbe56e057f20f883e");
+//            String str = getInstance().getMD5("1234");
+//            System.out.println("81dc9bdb52d04dc20036dbd8313ed055");
+
 //        }
 }

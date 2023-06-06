@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>可视化</title>
+    <script src="../jquery-3.6.4.min.js"></script>
+    <script src="../echarts.min.js"></script>
+    <style>
+        .box{
+            width: 1050px;
+            height: 500px;
+            background-color: rgb(188, 227, 236);
+        }
+    </style>
+</head>
+<body>
+   <div id="show_echarts" class="box">
+
+   </div>
+
+<script>
+        var date = []
+        function show(){
+            var myChart = echarts.init(document.querySelector(".box"));
+            //4.指定配置项和数据
+            var option = {
+                title: {
+                    text: '种类分析',
+                    subtext: '订单分类 or 商品分类',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b} : {c} ({d}%)'
+                },
+                legend: {
+                    left: 'center',
+                    top: 'bottom',
+                    data: [
+                        #for(x:list)
+                            "#(x.name)",
+                        #end
+                    ]
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        mark: { show: true },
+                        dataView: { show: true, readOnly: false },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                series: [
+                    {
+                        name: 'Radius Mode',
+                        type: 'pie',
+                        radius: [20, 140],
+                        center: ['25%', '50%'],
+                        roseType: 'radius',
+                        itemStyle: {
+                            borderRadius: 5
+                        },
+                        label: {
+                            show: false
+                        },
+                        emphasis: {
+                            label: {
+                                show: true
+                            }
+                        },
+                        data: [
+                            #for(x:list)
+                            { value: #(x.value), name: '#(x.name)' },
+                            #end
+                        ]
+                    },
+                    {
+                        name: 'Area Mode',
+                        type: 'pie',
+                        radius: [20, 140],
+                        center: ['75%', '50%'],
+                        roseType: 'area',
+                        itemStyle: {
+                            borderRadius: 5
+                        },
+                        data: [
+                            #for(x:list)
+                                { value: #(x.value), name: '#(x.name)' },
+                            #end
+                        ]
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        }
+        show()
+
+
+</script>
+</body>
+</html>

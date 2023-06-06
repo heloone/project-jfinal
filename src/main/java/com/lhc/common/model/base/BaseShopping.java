@@ -17,12 +17,12 @@ public abstract class BaseShopping<M extends BaseShopping<M>> extends Model<M> i
 		return getInt("id");
 	}
 	
-	public void setGoodId(java.lang.Integer goodId) {
-		set("goodId", goodId);
+	public void setOwnerId(java.lang.Integer ownerId) {
+		set("ownerId", ownerId);
 	}
 	
-	public java.lang.Integer getGoodId() {
-		return getInt("goodId");
+	public java.lang.Integer getOwnerId() {
+		return getInt("ownerId");
 	}
 	
 	public void setUserId(java.lang.Integer userId) {
@@ -31,6 +31,46 @@ public abstract class BaseShopping<M extends BaseShopping<M>> extends Model<M> i
 	
 	public java.lang.Integer getUserId() {
 		return getInt("userId");
+	}
+	
+	public void setName(java.lang.String name) {
+		set("name", name);
+	}
+	
+	public java.lang.String getName() {
+		return getStr("name");
+	}
+	
+	public void setImg(java.lang.String img) {
+		set("img", img);
+	}
+	
+	public java.lang.String getImg() {
+		return getStr("img");
+	}
+	
+	public void setInfo(java.lang.String info) {
+		set("info", info);
+	}
+	
+	public java.lang.String getInfo() {
+		return getStr("info");
+	}
+	
+	public void setType(java.lang.String type) {
+		set("type", type);
+	}
+	
+	public java.lang.String getType() {
+		return getStr("type");
+	}
+	
+	public void setPrice(java.lang.String price) {
+		set("price", price);
+	}
+	
+	public java.lang.String getPrice() {
+		return getStr("price");
 	}
 	
 	public void setTime(java.util.Date time) {

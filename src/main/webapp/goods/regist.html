@@ -4,21 +4,56 @@
     <meta charset="UTF-8">
     <title>用户注册</title>
     <link rel="stylesheet" href="./css/login.css">
+    <script src="../jquery-3.6.4.min.js"></script>
 </head>
 <body>
-<div class="login-container" style="width: 500px;">
+<div class="login-container" style="width: 500px; height: 400px" >
     <div class="left-container" >
         <div class="title"><span>注册</span></div>
         <div class="input-container">
-            <input type="text" name="username" placeholder="用户名">
+            <input type="text" name="username" placeholder="账号">
+            <input type="text" name="user" placeholder="用户名">
+            <input type="text" name="phone" placeholder="联系电话">
             <input type="text" name="address" placeholder="收货地址">
             <input type="password" name="password" placeholder="密码">
         </div>
         <div class="regist-button" style="margin-top: -100px">
-            <span>提交</span>
+            <span onclick="regist()">提交</span>
         </div>
     </div>
 
 </div>
+
+<script type="text/javascript">
+
+    function regist(){
+        var username = $("[name='username']").val()
+        var password = $("[name='password']").val()
+        var user = $("[name='user']").val()
+        var phone = $("[name='phone']").val()
+        var address = $("[name='address']").val()
+        console.log(username)
+        console.log(password)
+        $.post("http://localhost/goods/addUser",{
+            "username":username,
+            "password":password,
+            "user":user,
+            "phone":phone,
+            "address":address
+        },function (res) {
+            console.log(res)
+            if (res.msg) {
+                alert(res.msg)
+                change()
+            }
+            if (res.state === "ok") {
+                localStorage.setItem("userToken", res.token)
+                let url = 'http://localhost/goods?token=' + localStorage.getItem("userToken")
+                window.location.href = url;
+            }
+        })
+    }
+
+</script>
 </body>
 </html>

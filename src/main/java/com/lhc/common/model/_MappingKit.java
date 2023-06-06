@@ -1,4 +1,4 @@
-package com.lhc.common.model;
+package  com.lhc.common.model;
 
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 

@@ -9,6 +9,7 @@ import com.jfinal.config.Routes;
  **/
 public class UserRoutes extends Routes {
     public void config(){
+        this.scan("com.lhc.goods");
         setBaseViewPath("/goods");
     }
 }

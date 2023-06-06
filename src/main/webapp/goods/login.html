@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>用户登录</title>
     <link rel="stylesheet" href="./css/login.css">
+    <script src="../jquery-3.6.4.min.js"></script>
 </head>
 <body>
 <div class="login-container">
@@ -23,9 +24,35 @@
             <p>如果您还未注册，请点击注册；如果您已注册，请在输入账号密码后点击提交。</p>
         </div>
         <div class="action-container">
-            <span>提交</span>
+            <span onclick="logins()">提交</span>
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    function logins(){
+        var username = $("[name='username']").val()
+        var password = $("[name='password']").val()
+        console.log(username)
+        console.log(password)
+        $.post("http://localhost/goods/findUser",{
+            "username":username,
+            "password":password,
+        },function (res) {
+            console.log(res)
+            if (res.msg) {
+                alert(res.msg)
+                change()
+            }
+            if (res.state === "ok") {
+                localStorage.setItem("userToken", res.token)
+                let url = 'http://localhost/goods?token=' + localStorage.getItem("userToken")
+                window.location.href = url;
+            }
+        })
+    }
+
+</script>
 </body>
 </html>

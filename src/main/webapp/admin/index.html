@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <title>二手交易平台商家界面</title>
+    <link rel="stylesheet" href="../layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="../box.css">
+    <script src="../jquery-3.6.4.min.js"></script>
+    <script src="../layui/layui.js"></script>
+    <script src="../echarts.min.js"></script>
+    <style type="text/css">
+        .layui-table-cell{
+            height: auto!important;
+            white-space: normal;
+        }
+        .box{
+            width: 700px;
+            height: 500px;
+            background-color: rgb(188, 227, 236);
+        }
+    </style>
+
+</head>
+<body>
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo layui-hide-xs layui-bg-black">商家界面</div>
+        <!-- 头部区域（可配合layui 已有的水平导航） -->
+
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item layui-hide layui-show-md-inline-block">
+                <a href="javascript:;">
+                    <img src="//tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" class="layui-nav-img">
+                    #(admins.user)
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a onclick="editInfo()">Settings</a></dd>
+                    <dd><a onclick="sign_out()">Sign out</a></dd>
+                </dl>
+            </li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item"><a href="javascript:;" onclick="show_good()">我的商品</a></li>
+                <li class="layui-nav-item"><a href="javascript:;" onclick="show_shopping()">交易记录</a></li>
+                <li class="layui-nav-item"><a href="javascript:;" onclick="show_echarts()">可视化</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <div id="show_good">
+            <script type="text/html" id="toolbarGood">
+                <input type="text" name="title" placeholder="请输入搜索内容" class="layui-input" style="display:inline-flex;width: 25%;margin-top: 17px;">
+                <button class="layui-btn layui-btn-primary" onclick="search_goods()" >搜索</button>
+                <button type="button" class="layui-btn layui-btn-normal" style="margin-top: 15px;display:inline;margin-left: 55%" onclick="add_good()">
+                    <i class="layui-icon layui-icon-add-circle" ></i>新增
+                </button>
+            </script>
+
+            <table class="layui-hide" id="goods" lay-filter="ed">
+            </table>
+
+            <script type="text/html" id="tool">
+                <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+            </script>
+
+            <script type="text/html" id="img">
+                <div><img src="{{d.img}}" width="80" height="80" alt="no"></div>
+            </script>
+        </div>
+
+        <div id="show_shopping">
+
+            <script type="text/html" id="toolbarShopping">
+                <button class="layui-btn" id="select1">
+                    选择分类
+                    <i class="layui-icon layui-icon-down layui-font-12"></i>
+                </button>
+                <input type="text" name="title" placeholder="请输入搜索内容" class="layui-input" style="display:inline-flex;width: 25%;margin-top: 17px;">
+                <button class="layui-btn layui-btn-primary" onclick="search_shopping()" >搜索</button>
+            </script>
+        </div>
+
+<!--        <div id="show_echarts" class="box">-->
+<!--            -->
+<!--        </div>-->
+        <div>
+            <iframe id="iframe" src="" frameborder="0" height="540" width="1165" ></iframe>
+        </div>
+
+
+    </div>
+
+
+    <!--<div class="layui-footer">
+        底部固定区域
+    </div> -->
+</div>
+
+<script>
+    //显示商品表格
+    // $("#iframe").attr('style','display:none')
+    function show_good(){
+        $("#show_good").attr('style','display:block')
+        $("#iframe").attr('style','display:none')
+        layui.use('table', function(){
+            var table = layui.table;
+            //渲染表格
+            table.render({
+                elem: '#goods'
+                ,url: 'http://localhost/admin/getGoods?id=1' //数据接口
+                ,parseData: function(res){ //res 即为原始返回的数据
+                    return {
+                        "code": res.code,//解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "count": res.count, //解析数据长度
+                        "data": res.data.list //解析数据列表
+                    };
+                }
+                ,cols: [[ //表头
+                    {field: 'id', title: 'ID', width:80}
+                    ,{field: 'name', title: '商品名', align: 'center', width:100}
+                    ,{field: 'img', title: '商品图片', align: 'center', width:160, templet : '#img'}
+                    ,{field: 'type', title: '商品类别', align: 'center', width:160}
+                    ,{field: 'info', title: '商品信息', align: 'center', width:160}
+                    ,{field: 'price', title: '商品价格', align: 'center', width:160,sort: true}
+                    // ,{field: 'owner'}
+                    ,{fixed: 'right', title: '操作', toolbar: '#tool', minWidth:160}
+                ]]
+                ,skin: 'line' //表格风格
+                ,even: true
+                ,page: true //开启分页
+                ,limit: 4 //每页默认显示的数量
+                ,limits:[4,8,16]
+                ,toolbar:'#toolbarGood'
+            });
+
+            table.on('tool(ed)', function(obj){
+                var data = obj.data;
+                console.log(obj)
+                if(obj.event === 'del'){
+                    layer.open({
+                        title:"提示框",
+                        content:"是否删除该行",
+                        btn:["删除","取消"],
+                        yes:function(layero, index){
+                            $.get("http://localhost/admin/delGood",{
+                                'id':obj.data.id,
+                            },function (res) {
+                                console.log(res)
+                                alert(res.msg)
+                            })
+                            obj.del();
+                            layer.close(layer.index)
+                        }
+                    });
+                } else if(obj.event === 'edit'){
+                    //弹出层
+                    layer.open({
+                        type:2,
+                        title:"修改商品",
+                        area:['450px','600px'],
+                        //content 使用enjoy模板，传递参数 obj.data
+                        content:['../common/addForm.html','no'],
+                        success:function(layero, index){
+                            console.log(data.name)
+                            console.log(layero)
+                            var body = layer.getChildFrame('body', index)
+                            body.find("[name='name']").val(data.name)
+                            body.find("option[value="+ data.type +"]").attr("selected",true)
+                            body.find("[name='info']").val(data.info)
+                            body.find("[name='price']").val(data.price)
+                            body.find('#demo1').attr("src",data.img)
+                            layui.form.render('select','Form')
+                        },
+                        btn:["提交修改","放弃修改"],
+                        btn1:function () {
+                            $.get("http://localhost/admin/editGood",{
+                                'id':data.id,
+                                'img':layer.getChildFrame('body').find("#demo1").attr('src'),
+                                'name':layer.getChildFrame('body').find("[name='name']").val(),
+                                'type':layer.getChildFrame('body').find("option[value="+ data.type +"]").val(),
+                                'info':layer.getChildFrame('body').find("[name='info']").val(),
+                                'price':layer.getChildFrame('body').find("[name='price']").val(),
+                            },function (data){
+                                alert(data.msg)
+                                console.log(data);
+                                if(data.msg === "修改成功")
+                                    window.location.reload();
+                            })
+                        }
+                    })
+                }
+            });
+
+        });
+    }
+    //增加物品
+    function add_good(){
+        layer.open({
+            type:2,
+            title:'添加商品',
+            area:['450px','600px'],
+            //content 使用enjoy模板，传递参数 obj.data
+            content:['../common/addForm.html','no'],
+            btn:["添加","放弃添加"],
+            btn1:function () {
+                $.get("http://localhost/admin/addGood",{
+                    'name':layer.getChildFrame('body').find("[name='name']").val(),
+                    'type':layer.getChildFrame('body').find("[name='type']").val(),
+                    'info':layer.getChildFrame('body').find("[name='info']").val(),
+                    'price':layer.getChildFrame('body').find("[name='price']").val(),
+                },function (data){
+                    alert(data.msg)
+                    if(data.msg === "添加成功")
+                        window.location.reload();
+                })
+            }
+        })
+    }
+    //搜索物品
+    function search_goods(){
+        var name = $("[name='title']").val()
+        layui.table.reload('goods',{
+            url: 'http://localhost/admin/findGoods?name='+ name,
+            parseData: function(res) { //res 即为原始返回的数据
+                return {
+                    "code": res.code,//解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": res.data //解析数据列表
+                };
+            }
+        })
+    }
+
+    //显示订单表格
+    function show_shopping(){
+        $("#show_good").attr('style','display:block')
+        $("#iframe").attr('style','display:none')
+        layui.use(['table','dropdown'], function() {
+            var table = layui.table;
+            var dropdown = layui.dropdown
+            //渲染表格
+            table.render({
+                elem: '#goods'
+                , url: 'http://localhost/admin/getShopping' //数据接口
+                , parseData: function (res) { //res 即为原始返回的数据
+                    console.log(res)
+                    return {
+                        "code": res.code,//解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "count": res.count, //解析数据长度
+                        "data": res.data //解析数据列表
+                    };
+                }
+                , cols: [[ //表头
+                    {field: 'userName', title: '用户账号', align: 'center', width: 160}
+                    , {field: 'user', title: '用户名称', align: 'center', width: 100}
+                    , {field: 'name', title: '商品名称', align: 'center', width: 100}
+                    , {field: 'img', title: '商品图片', align: 'center', width: 160, templet: '#img'}
+                    , {field: 'type', title: '商品类别', align: 'center', width: 100}
+                    , {field: 'info', title: '商品信息', align: 'center', width: 100}
+                    , {field: 'price', title: '商品价格', align: 'center', width: 160, sort: true}
+                    , {field: 'time', title: '交易时间', align: 'center', width: 160, sort: true}
+                ]]
+                , skin: 'line' //表格风格
+                , even: true
+                , page: true //开启分页
+                , limit: 4 //每页默认显示的数量
+                , limits: [4, 8, 16]
+                , toolbar: '#toolbarShopping'
+            });
+            //渲染下拉菜单
+            dropdown.render({
+                elem: '#select1' //可绑定在任意元素中，此处以上述按钮为例
+                , data: [{
+                    title: '用户账号'
+                    , id: 1
+                }, {
+                    title: '用户名称'
+                    , id: 2
+                }, {
+                    title: '商品名称'
+                    , id: 3
+                }, {
+                    title: '商品类型'
+                    , id: 4
+                },]
+                , type: 'group'
+                , id: 'select1'
+                //菜单被点击的事件
+                , click: function (obj) {
+                    var d = document.getElementById('select1')
+                    d.textContent = obj.title
+                    console.log(d)
+                    console.log(obj);
+                }
+            });
+        })
+    }
+
+    //搜索订单
+    function search_shopping(){
+        var name = $("[name='title']").val()
+        var type = document.getElementById('select1').textContent
+        console.log(name)
+        console.log(type)
+        layui.table.reload('goods',{
+            url: 'http://localhost/admin/findShopping?name='+ name + '&type=' + type,
+            parseData: function(res) { //res 即为原始返回的数据
+                return {
+                    "code": res.code,//解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": res.data //解析数据列表
+                };
+            }
+        })
+        layui.dropdown.render({
+            elem: '#select1' //可绑定在任意元素中，此处以上述按钮为例
+            , data: [{
+                title: '用户账号'
+                , id: 1
+            }, {
+                title: '用户名称'
+                , id: 2
+            }, {
+                title: '商品名称'
+                , id: 3
+            }, {
+                title: '商品类型'
+                , id: 4
+            },]
+            , type: 'group'
+            , id: 'select1'
+            //菜单被点击的事件
+            , click: function (obj) {
+                var d = document.getElementById('select1')
+                d.textContent = obj.title
+                console.log(d)
+                console.log(obj);
+            }
+        });//共享模板
+    }
+
+    //修改个人信息
+    function editInfo(){
+        layer.open({
+            type:2,
+            title:"修改个人信息",
+            area:['450px','500px'],
+            //content 使用enjoy模板，传递参数 obj.data
+            content:['http://localhost/admin/getInfo','no'],
+        })
+    }
+
+    //可视化
+    function  show_echarts(){
+        $("#show_good").attr('style','display:none')
+        // $("#show_shopping").attr('style','display:none')
+        $("#iframe").attr('style','display:block')
+        iframe.setAttribute("src",'http://localhost/admin/show_orders')
+    }
+
+    //退出登录，删除token
+    function sign_out(){
+        localStorage.removeItem("adminToken")
+        window.location.href="login.html"
+    }
+
+
+
+
+</script>
+</body>
+</html>

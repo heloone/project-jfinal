@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>管理员登录</title>
     <link rel="stylesheet" href="./css/login.css">
+    <script src="../jquery-3.6.4.min.js"></script>
 </head>
 <body>
     <div id="login-box">
@@ -15,23 +16,43 @@
             <div class="item">
                 <input type="password" placeholder="password" name="password" id="password">
             </div>
+            <div class="item">
+                <input  type="text" name="code" id="yzm" placeholder="验证码" style="margin-left: 85px" > <img src="get_code" height="25px" width="80px" id="code" onclick="change()"><br>
+            </div>
         </div>
-        <button type="submit" name="login" id="login">Login</button>
+        <button  name="login" id="login" onclick="logins()">Login</button>
     </div>
-<script>
-    document.getElementById('login').addEventListener('click',function() {
-        var username = document.getElementById('username');
-        var password = document.getElementById('password');
-        if (username.value == "") {
-            alert("请输入用户名");
-        } else if (password.value  =="") {
-            alert("请输入密码");
-        } else if(username.value == "admin" && password.value == "123456"){
-            window.location.href='https://www.baidu.com/';
-        } else {
-            alert("请输入正确的用户名和密码！")
-        }
-    })
+<script type="text/javascript">
+
+    function change(){
+        var captchaImg = document.querySelector('#code');
+        captchaImg.src = "get_code/" + new Date().getTime();
+    }
+
+    function logins(){
+        var username = document.getElementById('username').value
+        var password = $("#password").val()
+        var code = $("#yzm").val()
+        console.log(username)
+        console.log(password)
+        $.post("http://localhost/admin/findAdmin",{
+            "username":username,
+            "password":password,
+            "code":code
+        },function (res){
+            console.log(res)
+            if(res.msg){
+                alert(res.msg)
+                change()
+            }
+            if(res.state === "ok"){
+                localStorage.setItem("adminToken",res.token)
+                let url = 'http://localhost/admin?token='+localStorage.getItem("adminToken")
+                window.location.href = url;
+            }
+
+        })
+    }
 </script>
 </body>
 </html>
